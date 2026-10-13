@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approche Agile</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f0f4ff, #6d88cc, #162f9b);
+            color: #1e293b;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: white;
+            box-shadow: 0 3px 15px #00000010;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: #2e33be;
+            margin-top: 0;
+        }
+
+        #search {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin: 15px auto;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        #counter {
+            color: #64748b;
+        }
+
+        .all {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            padding: 0 25px 30px;
+        }
+
+        .def {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 5px 15px #0000000d;
+            border-bottom: 3px solid #c7d2fe;
+            transition: 0.3s;
+            min-width: 0;
+        }
+
+        .def:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px #00000015;
+        }
+
+        .def h3 {
+            color: #2e33be;
+            margin: 0;
+            cursor: pointer;
+            line-height: 1.5;
+        }
+
+        .def h3::after {
+            content: "＋";
+            float: right;
+            margin-left: 8px;
+            color: #0bba9d;
+        }
+
+        .def.active h3::after {
+            content: "−";
+        }
+
+        .def p {
+            display: none;
+            color: #475569;
+            line-height: 1.7;
+            margin-bottom: 0;
+            margin-top: 15px;
+        }
+
+        .def.active p {
+            display: block;
+        }
+
+        .def p b {
+            color: #4338ca;
+        }
+
+        .def img {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            max-height: 200px;
+            height: auto;
+            object-fit: contain;
+            margin: 10px auto;
+            border-radius: 8px;
+            cursor: zoom-in;
+            transition: 0.3s;
+        }
+
+        .def img:hover {
+            transform: scale(1.03);
+        }
+
+        .def.hidden {
+            display: none;
+        }
+
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.88);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .image-modal img {
+            display: block;
+            max-width: 90vw;
+            max-height: 85vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 10px;
+            cursor: default;
+        }
+
+        #closeModal {
+            position: absolute;
+            top: 15px;
+            right: 30px;
+            color: white;
+            font-size: 45px;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        a {
+            color: #4338ca;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 25px 15px;
+            }
+
+            header h1 {
+                font-size: 25px;
+            }
+
+            .all {
+                grid-template-columns: 1fr;
+                padding: 0 15px 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Adopter l'approche agile</h1>
+
+        <input
+            type="text"
+            id="search"
+            placeholder="🔎 Rechercher une notion..."
+        >
+
+        <p id="counter">Nombre de notions : 0</p>
+    </header>
+
+    <main class="all" id="cards">
+
+        <div class="def">
+            <h3>Projet</h3>
+            <p>Un projet est un ensemble d'activités organisées et ordonnées afin d'atteindre un objectif précis et de produire un résultat déterminé, avec des ressources et dans un délai défini.</p>
+        </div>
+
+        <div class="def">
+            <h3>La gestion de projets</h3>
+            <p>La gestion de projet consiste à planifier, organiser et contrôler les ressources pour atteindre des objectifs précis, en respectant les délais, le budget et le périmètre défini.</p>
+        </div>
+
+        <div class="def">
+            <h3>Les ressources</h3>
+            <p>Les ressources d'un projet sont les éléments humains, matériels et financiers nécessaires pour réaliser les tâches et atteindre les objectifs du projet.</p>
+            <p><img src="6-types-ressources-projet.avif" alt="Les ressources d'un projet"></p>
+        </div>
+
+        <div class="def">
+            <h3>Livrable</h3>
+            <p>Un livrable de projet désigne un résultat attendu, tangible et mesurable, produit dans le cadre d'un projet.</p>
+        </div>
+
+        <div class="def">
+            <h3>Charte de projet</h3>
+            <p>Une charte de projet est un document officiel qui officialise l'existence d'un projet et définit ses objectifs, sa portée et ses parties prenantes.</p>
+            <p><img src="charteProjet.png" alt="Charte de projet"></p>
+        </div>
+
+        <div class="def">
+            <h3>Les parties prenantes</h3>
+            <p>Les parties prenantes d'un projet sont toutes les personnes, groupes ou organisations qui peuvent influencer le projet ou être influencés par lui, positivement ou négativement.</p>
+        </div>
+
+        <div class="def">
+            <h3>Les principaux rôles d'un projet</h3>
+            <p>👤 Chef de projet : organise et suit l'avancement du projet.</p>
+            <p>👥 Équipe de réalisation : effectue les tâches et produit les livrables.</p>
+            <p>🤝 Parties prenantes : participent au projet ou sont concernées par ses résultats.</p>
+        </div>
+
+        <div class="def">
+            <h3>La matrice RACI</h3>
+            <p>La matrice RACI (Responsible, Accountable, Consulted, Informed) est un outil de management permettant d'assigner clairement les responsabilités pour chaque tâche d'un projet.</p>
+            <p><a href="https://youtu.be/PckETQlHG8U?si=isMiek0uem13RTgC" target="_blank" rel="noopener">Pour mieux comprendre &gt;&gt;</a></p>
+            <p><img src="matrice_raci.jpg" alt="Matrice RACI"></p>
+        </div>
+
+        <div class="def">
+            <h3>Caractéristiques de base d'un projet</h3>
+            <p>🎯 Objectif : le résultat à atteindre.</p>
+            <p>📦 Livrable : le résultat à fournir.</p>
+            <p>⏱ Durée : le temps nécessaire.</p>
+            <p>⚙ Activités : les tâches à réaliser.</p>
+            <p>💰 Ressources : les moyens nécessaires.</p>
+        </div>
+
+        <div class="def">
+            <h3>Les contraintes</h3>
+            <p>💰 Coût / Budget : les limites financières.</p>
+            <p>📦 Livrable / Qualité / Périmètre : ce qui doit être réalisé et son niveau de qualité.</p>
+            <p>⏱ Durée / Délai : le temps disponible pour terminer le projet.</p>
+        </div>
+
+        <div class="def">
+            <h3>Les étapes pour réaliser un projet</h3>
+            <p>1️⃣ Analyser les besoins.</p>
+            <p>2️⃣ Concevoir la solution.</p>
+            <p>3️⃣ Exécuter et réaliser le projet.</p>
+            <p>4️⃣ Tester le résultat.</p>
+            <p>5️⃣ Déployer et livrer le produit.</p>
+            <p>6️⃣ Assurer la maintenance.</p>
+        </div>
+
+        <div class="def">
+            <h3>L'analyse des besoins</h3>
+            <p>L'analyse des besoins est un processus structuré visant à identifier, comprendre et formaliser les attentes des parties prenantes pour les transformer en exigences exploitables et mesurables.</p>
+        </div>
+
+        <div class="def">
+            <h3>Types des besoins</h3>
+            <p><b>Besoin explicite :</b> exprimé directement par le client.</p>
+            <p><b>Besoin implicite :</b> non exprimé directement, mais attendu ou nécessaire.</p>
+        </div>
+
+        <div class="def">
+            <h3>Cahier des charges</h3>
+            <p>Un cahier des charges est un document qui formalise les besoins, objectifs, contraintes et livrables d'un projet afin d'assurer une compréhension commune entre toutes les parties prenantes.</p>
+        </div>
+
+        <div class="def">
+            <h3>Périmètre d'un projet</h3>
+            <p>Le périmètre d'un projet est l'ensemble des objectifs, livrables, tâches et limites qui définissent précisément ce qui sera réalisé et ce qui ne le sera pas.</p>
+        </div>
+
+        <div class="def">
+            <h3>Le contexte de projet</h3>
+            <p>Le contexte d'un projet correspond à l'ensemble des informations qui caractérisent le projet, notamment son environnement, ses besoins, ses objectifs et ses contraintes.</p>
+        </div>
+
+        <div class="def">
+            <h3>Méthodes de gestion d'un projet</h3>
+            <p><b>Prévisible :</b> méthodes classiques comme Cascade, V et Y.</p>
+            <p><b>Non prévisible :</b> méthodes agiles comme Scrum et Kanban, qui facilitent l'adaptation aux changements.</p>
+        </div>
+
+        <div class="def">
+            <h3>La méthode Cascade</h3>
+            <p>La méthode Cascade est une approche séquentielle de gestion de projet où chaque phase doit être terminée avant de passer à la suivante.</p>
+            <p><img src="Methode-en-cascade-1024x576.png" alt="Méthode Cascade"></p>
+            <p><a href="https://youtu.be/ynyA68AzIyU?si=HYOn9LI475Dy_VtA" target="_blank" rel="noopener">Pour mieux comprendre &gt;&gt;</a></p>
+        </div>
+
+        <div class="def">
+            <h3>La méthode V</h3>
+            <p>La méthode V est un modèle de gestion de projet séquentiel où chaque phase de conception est associée à une phase de vérification ou de validation correspondante, formant un schéma en V.</p>
+            <p><img src="Cycle-en-V-9-etapes-.webp" alt="Méthode en V"></p>
+            <p><a href="https://youtu.be/12Ez4Eeqa3s?si=jd7r_kXKqj9q2CQw" target="_blank" rel="noopener">Pour mieux comprendre &gt;&gt;</a></p>
+        </div>
+
+        <div class="def">
+            <h3>La méthode Y</h3>
+            <p>La méthode Y est une méthode de conception qui part d'une base commune puis sépare le projet en branches selon les solutions à réaliser, avant leur intégration.</p>
+            <p><img src="methodeY.jpeg" alt="Méthode Y"></p>
+        </div>
+
+        <div class="def">
+            <h3>Art de vente</h3>
+            <p>L'art de vente désigne l'ensemble des techniques et des compétences nécessaires pour convaincre les clients d'acheter.</p>
+        </div>
+
+        <div class="def">
+            <h3>Clé de succès d'un projet</h3>
+            <p>Une des clés du succès d'un projet est la bonne compréhension des besoins du client.</p>
+        </div>
+
+        <div class="def">
+            <h3>Marketing fondamental</h3>
+            <p>Le marketing fondamental désigne l'ensemble des principes et pratiques visant à comprendre les besoins des consommateurs, à concevoir une offre adaptée et à satisfaire les clients.</p>
+        </div>
+
+        <div class="def">
+            <h3>Marketing digital</h3>
+            <p>Le marketing digital désigne toutes les techniques utilisées en ligne pour promouvoir une marque, un produit ou un service.</p>
+        </div>
+
+        <div class="def">
+            <h3>Agilité</h3>
+            <p>L'agilité est la capacité à s'adapter rapidement aux changements et à améliorer progressivement le travail.</p>
+        </div>
+
+        <div class="def">
+            <h3>Scrum</h3>
+            <p>Scrum est un framework de gestion de projet agile qui aide les équipes à organiser et superviser leur travail à travers des valeurs, des principes et des pratiques.</p>
+            <p><img src="scrum.webp" alt="Méthode Scrum"></p>
+            <p><a href="https://youtu.be/anZcEIQlpoY?si=FkpXkvfR0Ip2dt_B" target="_blank" rel="noopener">Pour mieux comprendre &gt;&gt;</a></p>
+        </div>
+
+        <div class="def">
+            <h3>Kanban</h3>
+            <p>Kanban est une méthode de gestion des flux de travail qui permet de visualiser les tâches, de maximiser l'efficacité et d'atteindre l'amélioration continue.</p>
+            <p><img src="kanban.webp" alt="Méthode Kanban"></p>
+            <p><a href="https://youtu.be/i2-WWbYJn_w?si=UuK2tLcWsEBn8Wdd" target="_blank" rel="noopener">Pour mieux comprendre &gt;&gt;</a></p>
+        </div>
+
+        <div class="def">
+            <h3>Programmation extrême (XP)</h3>
+            <p>Extreme Programming (XP) est une méthodologie de développement de logiciels qui met l'accent sur la collaboration, l'adaptabilité et la fourniture de logiciels de haute qualité.</p>
+            <p><img src="kanban.webp" alt="Illustration de la programmation extrême"></p>
+            <p><a href="https://youtu.be/Y09iSgTfq5s?si=Am9MSzGtBzrSNdK9" target="_blank" rel="noopener">Pour mieux comprendre &gt;&gt;</a></p>
+        </div>
+
+        <div class="def">
+            <h3>Le risque</h3>
+            <p>Un risque est un événement incertain qui peut avoir un impact positif ou négatif sur le projet, notamment en termes de budget, de délai, de qualité et de périmètre.</p>
+        </div>
+
+        <div class="def">
+            <h3>Types de risques</h3>
+            <p>Risques techniques : problèmes liés à la technologie.</p>
+            <p>Risques financiers : dépassement du budget.</p>
+            <p>Risques liés au délai : retards dans la réalisation.</p>
+            <p>Risques humains et organisationnels : problèmes d'équipe ou de communication.</p>
+            <p>Risques de sécurité : menaces sur les données et les systèmes.</p>
+            <p>Risques juridiques et réglementaires : non-respect des lois et obligations.</p>
+        </div>
+
+        <div class="def">
+            <h3>Risques techniques</h3>
+            <p>Problèmes liés à la technologie, aux logiciels ou à l'infrastructure utilisée dans le projet.</p>
+        </div>
+
+        <div class="def">
+            <h3>Risques financiers</h3>
+            <p>Dépassement du budget ou augmentation imprévue des coûts du projet.</p>
+        </div>
+
+        <div class="def">
+            <h3>Risques liés au délai</h3>
+            <p>Événements pouvant provoquer un retard dans la réalisation du projet.</p>
+        </div>
+
+        <div class="def">
+            <h3>Risques humains et organisationnels</h3>
+            <p>Difficultés liées aux membres de l'équipe, à la communication ou à l'organisation du travail.</p>
+        </div>
+
+        <div class="def">
+            <h3>Risques de sécurité</h3>
+            <p>Menaces qui peuvent compromettre la confidentialité, l'intégrité et la disponibilité des données.</p>
+        </div>
+
+        <div class="def">
+            <h3>Risques juridiques et réglementaires</h3>
+            <p>Non-respect des lois, des contrats ou des obligations réglementaires applicables au projet.</p>
+        </div>
+
+        <div class="def">
+            <h3>Diagramme de Gantt</h3>
+            <p>Un diagramme de Gantt est un outil de gestion de projet qui visualise les tâches d'un projet sur une chronologie à l'aide de barres horizontales représentant leur durée et leur avancement.</p>
+            <p><img src="gantt.jpg" alt="Diagramme de Gantt"></p>
+            <p><a href="https://youtu.be/qpthiq75M3w?si=AdooNJ4R-Myb9j3j" target="_blank" rel="noopener">Pour mieux comprendre &gt;&gt;</a></p>
+        </div>
+
+        <div class="def">
+            <h3>Diagramme de PERT</h3>
+            <p>Un diagramme de PERT est un outil visuel de planification de projet utilisé pour planifier, organiser et coordonner les tâches d'un projet.</p>
+            <p><img src="PERT.webp" alt="Diagramme de PERT"></p>
+            <p><a href="https://youtu.be/xAidvykSNXo?si=kP4NcP9uVE0EAIOx" target="_blank" rel="noopener">Pour mieux comprendre &gt;&gt;</a></p>
+        </div>
+
+    </main>
+
+    <div id="imageModal" class="image-modal">
+        <span id="closeModal" title="Fermer">&times;</span>
+        <img id="bigImage" src="" alt="Image agrandie">
+    </div>
+
+    <script>
+        const notions = document.querySelectorAll(".def");
+
+        notions.forEach(function (notion) {
+            const titre = notion.querySelector("h3");
+
+            titre.addEventListener("click", function () {
+                notion.classList.toggle("active");
+            });
+        });
+
+        const search = document.getElementById("search");
+        const counter = document.getElementById("counter");
+
+        function compterNotions() {
+            let nombre = 0;
+
+            notions.forEach(function (notion) {
+                if (!notion.classList.contains("hidden")) {
+                    nombre++;
+                }
+            });
+
+            counter.textContent = "Nombre de notions : " + nombre;
+        }
+
+        search.addEventListener("input", function () {
+            const texte = search.value.toLowerCase().trim();
+
+            notions.forEach(function (notion) {
+                const contenu = notion.textContent.toLowerCase();
+
+                if (contenu.includes(texte)) {
+                    notion.classList.remove("hidden");
+                } else {
+                    notion.classList.add("hidden");
+                    notion.classList.remove("active");
+                }
+            });
+
+            compterNotions();
+        });
+
+        const images = document.querySelectorAll(".def img");
+        const modal = document.getElementById("imageModal");
+        const bigImage = document.getElementById("bigImage");
+        const closeModal = document.getElementById("closeModal");
+
+        images.forEach(function (image) {
+            image.addEventListener("click", function () {
+                modal.style.display = "flex";
+                bigImage.src = image.src;
+                bigImage.alt = image.alt;
+            });
+        });
+
+        closeModal.addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+
+        modal.addEventListener("click", function (event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
+                modal.style.display = "none";
+            }
+        });
+
+        compterNotions();
+    </script>
+
+</body>
+</html>
